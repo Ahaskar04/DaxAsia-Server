@@ -2,10 +2,20 @@ import gspread
 import hashlib
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
+import os
+import json
+from oauth2client.service_account import ServiceAccountCredentials
+
+json_creds = os.getenv("GOOGLE_CREDENTIALS")
 
 # 1. Define scopes & authenticate with Google Sheets
 SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-CREDS = ServiceAccountCredentials.from_json_keyfile_name("sturdy-dogfish-274710-7bd1c780cdde.json", SCOPE)
+# CREDS = ServiceAccountCredentials.from_json_keyfile_name("sturdy-dogfish-274710-7bd1c780cdde.json", SCOPE)
+if json_creds:
+    creds_dict = json.loads(json_creds)
+    CREDS = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, SCOPE)
+else:
+    raise ValueError("Google service account credentials not found. Make sure the environment variable is set.")
 client = gspread.authorize(CREDS)
 
 # 2. Open your Google Sheet (single tab approach)
