@@ -5,6 +5,10 @@ from referral_script import add_referrer, use_referral_code, update_login_status
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+@app.route("/")
+def home():
+    return "DaxAsia Server is Running!"
+    
 # 1. Use a referral code for sign-up (called when processing a referral from a link)
 @app.route("/use", methods=["POST"])
 def use_code():
